@@ -295,42 +295,20 @@ function SupportButton() {
 
 function FloatingAnnouncement() {
     const { appConfig } = useCurrency();
-    const [isVisible, setIsVisible] = React.useState(false);
 
-    React.useEffect(() => {
-        if (appConfig?.announcement_enabled && appConfig?.announcement_message) {
-            // Use session storage to show announcement once per session
-            const dismissed = sessionStorage.getItem('announcement_dismissed');
-            if (!dismissed) {
-                setIsVisible(true);
-            }
-        }
-    }, [appConfig]);
-
-    const handleDismiss = () => {
-        setIsVisible(false);
-        sessionStorage.setItem('announcement_dismissed', 'true');
-    };
-
-    if (!isVisible) {
+    if (!appConfig?.announcement_enabled || !appConfig?.announcement_message) {
         return null;
     }
 
     return (
-        <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-primary/10 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+        <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-primary/10 px-6 py-2.5 sm:px-3.5">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <p className="text-sm leading-6 text-foreground">
                     <Megaphone className="inline h-5 w-5 mr-2" />
                     <strong className="font-semibold">Aviso:</strong>
                     <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
-                    {appConfig?.announcement_message}
+                    {appConfig.announcement_message}
                 </p>
-            </div>
-            <div className="flex flex-1 justify-end">
-                <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]" onClick={handleDismiss}>
-                    <span className="sr-only">Dismiss</span>
-                    <CloseIcon className="h-5 w-5 text-foreground" aria-hidden="true" />
-                </button>
             </div>
         </div>
     );
